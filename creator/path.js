@@ -27,7 +27,7 @@ class PathCreator {
         for(let i in this.points) {
             points.push(this.points[i])
         }
-        return new Path(points, this.close, view.lineStyle)
+        return new Path(points, this.close, view.style)
     }
 
     onmousedown(event) {
@@ -68,7 +68,7 @@ class PathCreator {
 
     onpaint(ctx) {
         if(this.started) {
-            let props = view.properties
+            let props = view.style
             ctx.lineWidth = props.lineWidth
             ctx.strokeStyle = props.lineColor
             ctx.beginPath()

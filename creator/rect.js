@@ -44,16 +44,16 @@ class RectCreator {
         let r = normalizeRect(rect)
         switch (this.shapeType) {
             case "line":
-                return new Line(rect.p1, rect.p2, view.lineStyle)
+                return new Line(rect.p1, rect.p2, view.style)
             case "rect":
-                return new Rect(r, view.lineStyle)
+                return new Rect(r, view.style)
             case "ellipse":
                 let rx = r.width / 2
                 let ry = r.height / 2
-                return new Ellipse(r.x + rx, r.y + ry, rx, ry, view.lineStyle)
+                return new Ellipse(r.x + rx, r.y + ry, rx, ry, view.style)
             case "circle":
                 let rc = Math.sqrt(r.width * r.width + r.height * r.height)
-                return new Ellipse(rect.p1.x, rect.p1.y, rc, rc, view.lineStyle)
+                return new Ellipse(rect.p1.x, rect.p1.y, rc, rc, view.style)
             default:
                 alert("unknown shapeType: " + this.shapeType)
                 return null

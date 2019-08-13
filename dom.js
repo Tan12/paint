@@ -1,21 +1,28 @@
-class LineStyle {
-    constructor(width, color) {
-        this.width = width
-        this.color = color
+class ShapeStyle {
+    constructor(lineWidth, lineColor, fillColor) {
+        this.lineWidth = lineWidth
+        this.lineColor = lineColor
+        this.fillColor = fillColor
+    }
+    setProp(key, val) {
+      this[key] = val
+    }
+    clone() {
+      return new ShapeStyle(this.lineWidth, this.lineColor, this.fillColor)
     }
 }
 
 class Line {
-    constructor(point1, point2,  lineStyle) {
+    constructor(point1, point2, style) {
         this.pt1 = point1
         this.pt2 = point2
-        this.lineStyle = lineStyle
+        this.style = style
     }
 
     onpaint(ctx) {
-        let lineStyle = this.lineStyle
-        ctx.lineWidth = lineStyle.width
-        ctx.strokeStyle = lineStyle.color
+        let style = this.style
+        ctx.lineWidth = style.linwWidth
+        ctx.strokeStyle = style.lineColor
         ctx.beginPath()
         ctx.moveTo(this.pt1.x, this.pt1.y)
         ctx.lineTo(this.pt2.x, this.pt2.y)
@@ -24,17 +31,17 @@ class Line {
 }
 
 class Rect {
-    constructor(r, lineStyle){
+    constructor(r, style){
         this.x = r.x
         this.y = r.y
         this.width = r.width
         this.height = r.height
-        this.lineStyle = lineStyle
+        this.style = style
     }
     onpaint(ctx) {
-        let lineStyle = this.lineStyle
-        ctx.lineWidth = lineStyle.width
-        ctx.strokeStyle = lineStyle.color
+        let style = this.style
+        ctx.lineWidth = style.linwWidth
+        ctx.strokeStyle = style.lineColor
         ctx.beginPath()
         ctx.rect(this.x, this.y, this.width, this.height)
         ctx.stroke()
@@ -42,17 +49,17 @@ class Rect {
 }
 
 class Ellipse {
-    constructor(x, y, radiusX, radiusY, lineStyle) {
+    constructor(x, y, radiusX, radiusY, style) {
         this.x = x
         this.y = y
         this.radiusX = radiusX
         this.radiusY = radiusY
-        this.lineStyle = lineStyle
+        this.style = style
     }
     onpaint(ctx) {
-        let lineStyle = this.lineStyle
-        ctx.lineWidth = lineStyle.width
-        ctx.strokeStyle = lineStyle.color
+        let style = this.style
+        ctx.lineWidth = style.linwWidth
+        ctx.strokeStyle = style.lineColor
         ctx.beginPath()
         ctx.ellipse(this.x, this.y, this.radiusX, this.radiusY, 0, 0, 2 * Math.PI)
         ctx.stroke()
@@ -60,10 +67,10 @@ class Ellipse {
 }
 
 class Path{
-    constructor(points, close, lineStyle) {
+    constructor(points, close, style) {
         this.points = points
         this.close = close
-        this.lineStyle = lineStyle
+        this.style = style
     }
     onpaint(ctx) {
         let n = this.points.length
@@ -71,9 +78,9 @@ class Path{
             return
         }
         let points = this.points
-        let lineStyle = this.lineStyle
-        ctx.lineWidth = lineStyle.width
-        ctx.strokeStyle = lineStyle.color
+        let style = this.style
+        ctx.lineWidth = style.lineWidth
+        ctx.strokeStyle = style.lineColor
         ctx.beginPath()
         ctx.moveTo(points[0].x, points[0].y)
         for(let i = 1; i < n; i++) {

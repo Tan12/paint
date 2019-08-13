@@ -1,9 +1,6 @@
 class PaintView {
     constructor() {
-        this.properties = {
-            lineWidth: 1,
-            lineColor: "black"
-        }
+        this.style = new ShapeStyle(1, 'black', 'white')
         this.controllers = {}
         this._currentKey = ""
         this._current = null
@@ -59,10 +56,6 @@ class PaintView {
 
     get currentKey() {
         return this._currentKey
-    }
-    get lineStyle() {
-        let props = this.properties
-        return new LineStyle(props.lineWidth, props.lineColor)
     }
 
     onpaint(ctx) {

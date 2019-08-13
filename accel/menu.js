@@ -29,7 +29,7 @@ function onLineWidthChanged() {
     elem.blur()
     let val = parseInt(elem.value)
     if(val > 0) {
-        view.properties.lineWidth = val
+        view.style.lineWidth = val
     }
 }
 
@@ -37,7 +37,7 @@ function onLineWidthChanged() {
 function onLineColorChanged() {
     let elem = document.getElementById("LineColor")
     elem.blur()
-    view.properties.lineColor = elem.value
+    view.style.lineColor = elem.value
 }
 
 // 初始化选择器
