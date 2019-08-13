@@ -4,11 +4,14 @@ class PaintView {
         this.controllers = {}
         this._currentKey = ""
         this._current = null
+        this._selection = null
         this.onmousedown = null
         this.onmousemove = null
         this.onmouseup = null
         this.ondblclick = null
         this.onkeydown = null
+        this.onSelectionChanged = null
+        this.onControllerReset = null
         let drawing = document.getElementById("drawing")
         let view = this
         drawing.onmousedown = function(event) {
@@ -36,7 +39,7 @@ class PaintView {
                 view.ondblclick(event)
             }
         }
-        drawing.onkeydown = function(event) {
+        document.onkeydown = function(event) {
             switch (event.keyCode) {
                 // Tab键
                 case 9:
@@ -56,6 +59,19 @@ class PaintView {
 
     get currentKey() {
         return this._currentKey
+    }
+    // 引入selection
+    get selection() {
+      return this._selection
+    }
+    set selection(shape) {
+      let old = this._selection
+      if(old != shape) {
+        this._selection = shape
+        if(this.onSelectionChanged != null){
+          this.onSelectionChanged(old)
+        }
+      }
     }
 
     onpaint(ctx) {
@@ -98,6 +114,11 @@ class PaintView {
             this._current.stop()
             this._setCurrent("", null)
         }
+    }
+    fireControllerReset() {
+      if(this.onControllerReset != null){
+        this.onControllerReset()
+      }
     }
 
     _setCurrent(name, ctrl) {

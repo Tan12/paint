@@ -21,13 +21,14 @@ class PathCreator {
         this.points = []
         this.started = false
         invalidate(null)
+        view.fireControllerReset()
     }
     buildShape() {
         let points = [{x: this.fromPos.x, y: this.fromPos.y}]
         for(let i in this.points) {
             points.push(this.points[i])
         }
-        return new Path(points, this.close, view.style)
+        return new Path(points, this.close, view.style.clone())
     }
 
     onmousedown(event) {

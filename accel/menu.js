@@ -6,61 +6,103 @@ function installControllers() {
     <input type="button" id="LineCreator" value="Create Line" style="visibility:hidden">
     <input type="button" id="RectCreator" value="Create Rect" style="visibility:hidden">
     <input type="button" id="EllipseCreator" value="Create Ellipse" style="visibility:hidden">
-    <input type="button" id="CircleCreator" value="Create Circle" style="visibility:hidden">`
+    <input type="button" id="CircleCreator" value="Create Circle" style="visibility:hidden">
+    <input type="button" id="ShapeSelector" value="Select Shape" style="visibility:hidden">`
 
     for(let gkey in view.controllers) {
-        let key = gkey
-        let elem = document.getElementById(key)
-        elem.style.visibility = "visible"
-        elem.onclick = function() {
-            if(view.currentKey != ""){
-                document.getElementById(view.currentKey).removeAttribute("style")
-            }
-            elem.style.borderColor = "blue"
-            elem.blur()
-            view.invokeController(key)
-        }
+      if(gkey == 'ShapeSelector') {
+        continue
+      }
+      let key = gkey
+      let elem = document.getElementById(key)
+      elem.style.visibility = "visible"
+      elem.onclick = function() {
+          if(view.currentKey != "ShapeSelector"){
+              document.getElementById(view.currentKey).removeAttribute("style")
+          }
+          elem.style.borderColor = "blue"
+          elem.blur()
+          view.invokeController(key)
+      }
+    }
+    view.invokeController("ShapeSelector")
+    view.onControllerReset = function() {
+      document.getElementById(view.currentKey).removeAttribute("style")
+      view.invokeController("ShapeSelector")
     }
 }
 
-// 选择线条宽度
-function onLineWidthChanged() {
-    let elem = document.getElementById("LineWidth")
-    elem.blur()
-    let val = parseInt(elem.value)
-    if(val > 0) {
-        view.style.lineWidth = val
-    }
+function selection_setProp(key, val) {
+  if(view.selection != null) {
+    view.selection.setProp(key, val)
+    invalidate(null)
+  }
 }
 
-// 选择颜色
-function onLineColorChanged() {
-    let elem = document.getElementById("LineColor")
-    elem.blur()
-    view.style.lineColor = elem.value
+// lineColor/fillColor
+function onPropChanged(key) {
+  let elem = document.getElementById(key)
+  let val = elem.value
+  elem.blur()
+  view.style[key] = val
+  selection_setProp(key, val)
+}
+
+// lineWidth
+function onIntPropChanged(key) {
+  let elem = document.getElementById(key)
+  elem.blur()
+  let val = parseInt(elem.value)
+  if(val > 0) {
+    view.style[key] = val
+    selection_setProp(key, val)
+  }
+}
+
+function onSelectionChanged(old) {
+  let selection = view.selection
+  if(selecion != null){
+    let style = selection.style
+    view.style = selection.style
+    document.getElementById("lineWidth").value = style.lineWidth
+    document.getElementById("lineColor").value = style.lineColor
+    document.getElementById("fillColor").value = style.fillColor
+  }
 }
 
 // 初始化选择器
 function installPropSelectors() {
     document.getElementById("menu").insertAdjacentHTML("afterend", `<br><div id="properties">
-    <label for="LineWidth">LineWidth: </label>
-    <select id="LineWidth" onchange="onLineWidthChanged()">
+      <label for="lineWidth">LineWidth: </label>
+      <select id="lineWidth" onchange="onIntPropChanged('lineWidth')">
         <option value="1">1</option>
         <option value="3">3</option>
         <option value="5">5</option>
         <option value="7">7</option>
         <option value="9">9</option>
         <option value="11">11</option>
-    </select>&nbsp;
-    <label for="LineColor">LineColor: </label>
-    <select id="LineColor" onchange="onLineColorChanged()">
+      </select>&nbsp;
+      <label for="lineColor">LineColor: </label>
+      <select id="lineColor" onchange="onPropChanged('lineColor')">
         <option value="black">black</option>
         <option value="red">red</option>
         <option value="blue">blue</option>
         <option value="green">green</option>
         <option value="yellow">yellow</option>
         <option value="gray">gray</option>
-    </select>
+      </select>&nbsp;
+
+      <label for="fillColor">FillColor: </label>
+      <select id="fillColor" onchange="onPropChanged('fillColor')">
+        <option value="white">white</option>
+        <option value="null">transparent</option>
+        <option value="black">black</option>
+        <option value="red">red</option>
+        <option value="blue">blue</option>
+        <option value="green">green</option>
+        <option value="yellow">yellow</option>
+        <option value="gray">gray</option>
+      </select>
     </div>`)
 }
 

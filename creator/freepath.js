@@ -21,6 +21,7 @@ class FreePathCreator {
         this.points = []
         this.started = false
         invalidate(null)
+        view.fireControllerReset()
     }
 
     buildShape() {
@@ -28,7 +29,7 @@ class FreePathCreator {
         for(let i in this.points){
             points.push(this.points[i])
         }
-        return new Path(points, this.close, view.style)
+        return new Path(points, this.close, view.style.clone())
     }
 
     onmousedown(event) {
